@@ -79,7 +79,7 @@ class Graph:
                         lenFrontier += 1
                         discovered.add(vertex)
                         parents.update({vertex : current_state})
-        print("Unsolvable.")
+        return None
 
     def ChromaticNumber(self):
         colourSet = set()
@@ -158,7 +158,6 @@ class Graph:
             for vertex in self.Vertices:
                 if vertex not in G.Vertices:
                     neighbours.add(vertex)
-                    print(neighbours)
             if len(neighbours)<=0:
                 done = True
             if not done:
@@ -177,16 +176,69 @@ class Graph:
                 G.Vertices.add(current_min.b)
         return G.Edges
 
+    def KruskalMST(self):
+        F = Graph(self.Vertices,set())
+        S = self.Edges
+        while len(S) > 0 and not F.IsConnected():
+            current_min = next(iter(self.Edges))
+            for edge in S:
+                if current_min.weight > edge.weight:
+                    current_min = edge
+            S.remove(current_min)
+            if not F.DFS(current_min.a,current_min.b):
+                F.Edges.add(current_min)
+        return F.Edges
+
+    def IsConnected(self):
+        for vertex in self.Vertices:
+            for vertex2 in self.Vertices:
+                return bool(self.DFS(vertex,vertex2))
+
+    def SamMST(self):
+        return self.Edges
 
 
 
 
-a = Vertex("a")
-b = Vertex("b")
-c = Vertex("c")
-e1 = Edge(a, b, 3)
-e2 = Edge(a, c, 0.5)
-V = {a, b, c} # the vertex set
-E = {e1, e2}
+v1 = Vertex("a")
+v2 = Vertex("b")
+v3 = Vertex("c")
+v4 = Vertex("d")
+v5 = Vertex("e")
+v6 = Vertex("f")
+v7 = Vertex("g")
+v8 = Vertex("h")
+v9 = Vertex("i")
+v10 = Vertex("j")
+e1 = Edge(v1, v2, 3)
+e2 = Edge(v1, v3, 4)
+e3 = Edge(v1, v5, 10)
+e4 = Edge(v1, v6, 18)
+e5 = Edge(v2, v3, 1)
+e6 = Edge(v2, v4, 5)
+e7 = Edge(v2, v5, 9)
+e8 = Edge(v3, v4, 4)
+e9 = Edge(v4, v5, 7)
+e10 = Edge(v4, v7, 9)
+e11 = Edge(v4, v10, 9)
+e12 = Edge(v5, v6, 8)
+e13 = Edge(v5, v7, 8)
+e14 = Edge(v5, v8, 9)
+e15 = Edge(v6, v8, 9)
+e16 = Edge(v6, v9, 9)
+e17 = Edge(v7, v8, 2)
+e18 = Edge(v7, v9, 2)
+e19 = Edge(v8, v9, 4)
+e19 = Edge(v8, v10, 3)
+e20 = Edge(v9, v10, 6)
+
+V = {v1, v2, v3, v4, v5, v6, v7, v8, v9, v10}
+E = {e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20}
+
 G = Graph(V, E)
-print(G.PrimMST())
+runningmax =0
+MST = G.KruskalMST()
+print(MST)
+for edge in MST:
+    runningmax+=edge.weight
+print(runningmax)

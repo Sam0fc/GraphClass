@@ -153,16 +153,17 @@ class Graph:
         current_vertex = next(iter(self.Vertices))
         G = Graph(set({current_vertex}),set())
         done = False
-        neighbours = set()
         while not done:
+            neighbours = set()
             for vertex in self.Vertices:
                 if vertex not in G.Vertices:
                     neighbours.add(vertex)
-                if not neighbours:
-                    done = True
+                    print(neighbours)
+            if len(neighbours)<=0:
+                done = True
             if not done:
                 neighbour_edges = set()
-                for vertex in neighbours:
+                for vertex in iter(neighbours):
                     for start_vertex in G.Vertices:
                         edge = self.FindEdge(vertex,start_vertex)
                         if edge != None:
@@ -189,4 +190,3 @@ V = {a, b, c} # the vertex set
 E = {e1, e2}
 G = Graph(V, E)
 print(G.PrimMST())
-print(G)
